@@ -3,25 +3,24 @@
         <div class="container">
             <div class="row">
                 <div class="eight columns offset-by-two">
-                    <h1 class="headline">Déchargement bacalauréat</h1>
+                    <h1 class="headline">Words Occurants Counter</h1>
                 </div>
             </div>
 
             <div class="row">
                 <div class="eight columns offset-by-two">
                     <form class="wiki-search-form">
-                        <input
+                        <textarea
                             id="wiki-search-input"
-                            v-model="searchFor"
-                            type="search"
-                            placeholder="Entrer CNE ou CIN d' étudiant..."
+                            v-model="input"
+                            placeholder="Enter texte for analyze"
                             class="wiki-search-input"
-                        >
+                        />
                         <button
                             class="button btn btn-wiki"
                             @click.prevent="search"
                         >
-                            Rechercher
+                            Analyze
                         </button>
                     </form>
                 </div>
@@ -49,6 +48,13 @@ export default {
 </style>
 
 <style>
+form {
+    max-width: 300px;
+    margin: 10px auto;
+    padding: 10px 20px;
+    background: #f4f7f8;
+    border-radius: 8px;
+}
 #search-area .container {
     position: relative;
     width: 100%;
