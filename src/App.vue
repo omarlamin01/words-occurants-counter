@@ -18,7 +18,7 @@
                         />
                         <button
                             class="button btn btn-wiki"
-                            @click.prevent="search"
+                            @click.prevent="analyze"
                         >
                             Analyze
                         </button>
@@ -32,7 +32,108 @@
 <script>
 
 export default {
+    /* eslint-disable */
     name: 'App',
+    data() {
+        return {
+            input: '',
+            words: [],
+            processed_words: [],
+            results: [],
+            analyze_status: 0
+        }
+    },
+    methods: {
+        //check if a word exist in an array
+        isExist(word, array) {
+            let elementExistAlready = false;
+            array.forEach(element => {
+                if (element == word) {
+                    elementExistAlready = true;
+                }
+            })
+            return elementExistAlready;
+        },
+        explode(text, separator) {
+            let res = [];
+            let arr = text.split(separator);
+            arr.forEach(element => {
+                if (element.length >= 2) {
+                    res.push(element);
+                }
+            })
+            return res;
+        },
+        max(array) {
+            let maximum = 0;
+            array.forEach(el => {
+                if (el.occurants > maximum.occurants) {
+                    maximum = el;
+                }
+            })
+            return maximum;
+        },
+        min(array) {
+            let minimum = 100;
+            array.forEach(el => {
+                if (el.occurants < minimum.occurants) {
+                    minimum = el;
+                }
+            })
+            return minimum;
+        },
+        exclude(array, value) {
+            let res = []
+            array.forEach(el => {
+                if (el.occurants != value) {
+                    res.push(el);
+                }
+            })
+        },
+        sort(array, type) {
+            let arr = array;
+            let res = [];
+            if (type == "asc") {
+                array.forEach(el => {
+                    console.log("min >>" + this.min(arr).occurants + ">>" + this.min(arr).word)
+                    res.push(this.min(arr));
+                    arr = this.exclude(arr, this.min(arr).occurants);
+                })
+            } else {
+                array.forEach(el => {
+                    console.log("max >>" + this.max(arr).occurants + ">>" + this.max(arr).word)
+                    console.log("res >>" + res);
+                    console.log("arr >>" + arr);
+                    res.push(this.max(arr));
+                    arr = this.exclude(arr, this.max(arr).occurants);
+                })
+            }
+            return res;
+        },
+        analyze() {
+            this.words = [];
+            this.processed_words = [];
+            this.words = this.explode(this.input, " ");
+            this.words.forEach(word => {
+                if (!this.isExist(word, this.processed_words)) {
+                    this.processed_words.push(word);
+                    let nbWord = 0;
+                    this.words.forEach(element => {
+                        if (element == word)
+                            nbWord++;
+                    })
+                    let res = {word: word, occurants: nbWord};
+                    this.results.push(res);
+                }
+            })
+            console.log("result >>\n");
+            console.log(this.results);
+            console.log("sort asc >>\n");
+            console.log(this.sort(this.results, "asc"));
+            console.log("sort desc >>\n");
+            console.log(this.sort(this.results, "desc"))
+        }
+    }
 }
 </script>
 
